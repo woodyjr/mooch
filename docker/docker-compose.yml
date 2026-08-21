@@ -1,0 +1,44 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: mooch-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: mooch
+      POSTGRES_USER: mooch
+      POSTGRES_PASSWORD: mooch
+    ports:
+      - "5432:5432"
+    volumes:
+      - ../pgdata:/var/lib/postgresql/data
+
+  api:
+    build:
+      context: ..
+      dockerfile: docker/api/Dockerfile
+      target: final
+    container_name: mooch-api
+    depends_on:
+      - postgres
+    restart: unless-stopped
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__Mooch: ${MOOCH_CONNECTION_STRING:-Host=postgres;Port=5432;Database=mooch;Username=mooch;Password=mooch}
+      GoogleAuth__ClientId: ${GOOGLE_CLIENT_ID:-your-google-client-id.apps.googleusercontent.com}
+    ports:
+      - "8080:8080"
+
+  web:
+    build:
+      context: ..
+      dockerfile: docker/web/Dockerfile
+      target: final
+      args:
+        VITE_GOOGLE_CLIENT_ID: ${VITE_GOOGLE_CLIENT_ID:-your-google-client-id.apps.googleusercontent.com}
+    container_name: mooch-web
+    depends_on:
+      - api
+    restart: unless-stopped
+    ports:
+      - "5173:80"

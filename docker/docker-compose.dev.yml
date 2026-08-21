@@ -1,0 +1,60 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: mooch-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: mooch
+      POSTGRES_USER: mooch
+      POSTGRES_PASSWORD: mooch
+    ports:
+      - "5432:5432"
+    volumes:
+      - ../pgdata:/var/lib/postgresql/data
+
+  api:
+    build:
+      context: ..
+      dockerfile: docker/api/Dockerfile
+      target: dev
+    container_name: mooch-api
+    depends_on:
+      - postgres
+    restart: unless-stopped
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:8080
+      DOTNET_USE_POLLING_FILE_WATCHER: "1"
+      ConnectionStrings__Mooch: ${MOOCH_CONNECTION_STRING:-Host=postgres;Port=5432;Database=mooch;Username=mooch;Password=mooch}
+      GoogleAuth__ClientId: ${GOOGLE_CLIENT_ID:-your-google-client-id.apps.googleusercontent.com}
+    ports:
+      - "8080:8080"
+    volumes:
+      - ../apps/api:/src/app
+      - ../Directory.Build.props:/src/Directory.Build.props:ro
+      - api_nuget_packages:/root/.nuget/packages
+    command: ["dotnet", "watch", "run", "--no-launch-profile", "--urls", "http://0.0.0.0:8080"]
+
+  web:
+    build:
+      context: ..
+      dockerfile: docker/web/Dockerfile
+      target: dev
+      args:
+        VITE_GOOGLE_CLIENT_ID: ${VITE_GOOGLE_CLIENT_ID:-your-google-client-id.apps.googleusercontent.com}
+    container_name: mooch-web
+    depends_on:
+      - api
+    restart: unless-stopped
+    environment:
+      CHOKIDAR_USEPOLLING: "true"
+      VITE_GOOGLE_CLIENT_ID: ${VITE_GOOGLE_CLIENT_ID:-your-google-client-id.apps.googleusercontent.com}
+    ports:
+      - "5173:5173"
+    volumes:
+      - ../apps/web:/app
+      - web_node_modules:/app/node_modules
+
+volumes:
+  api_nuget_packages:
+  web_node_modules:
