@@ -3,21 +3,42 @@ import { NavLink, Outlet, useNavigate } from "react-router-dom";
 
 import { useAuth } from "../../features/auth/auth-context";
 import { acceptDogOwnerInvite, declineDogOwnerInvite, fetchPendingDogOwnerInvites } from "../../features/dogs/api";
-import { Button, buttonClassName } from "../ui/button";
+import { Button } from "../ui/button";
 import { MoochIcon } from "../ui/mooch-icon";
 
-const navigation = [
+const desktopNavigation = [
   { to: "/app", label: "Home", icon: "home" as const },
+  { to: "/app/walk", label: "Activity", icon: "walk" as const },
   { to: "/app/pack", label: "Pack", icon: "pack" as const },
-  { to: "/app/walk", label: "Walk", icon: "walk" as const },
   { to: "/app/ranks", label: "Ranks", icon: "ranks" as const },
-  { to: "/app/dogs", label: "My Dogs", icon: "dog" as const }
+  { to: "/app/dogs", label: "Dogs", icon: "dog" as const }
 ];
+
+const mobileNavigation = [
+  { to: "/app", label: "Home", icon: "home" as const },
+  { to: "/app/walk", label: "Activity", icon: "walk" as const },
+  { to: "/app/pack", label: "Pack", icon: "pack" as const },
+  { to: "/app/ranks", label: "Ranks", icon: "ranks" as const },
+  { to: "/app/dogs", label: "Dogs", icon: "dog" as const }
+];
+
+function getInitials(name: string | undefined): string {
+  if (!name) {
+    return "M";
+  }
+
+  return name
+    .split(" ")
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase() ?? "")
+    .join("");
+}
 
 export function AppShell() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { logout } = useAuth();
+  const { user, logout } = useAuth();
   const { data: pendingInvites = [] } = useQuery({
     queryKey: ["pending-dog-owner-invites"],
     queryFn: fetchPendingDogOwnerInvites
@@ -44,96 +65,137 @@ export function AppShell() {
     navigate("/");
   }
 
+  const userFirstName = user?.displayName?.split(" ", 2)[0] ?? "Josh";
+
   return (
-    <div className="app-shell">
-      <header className="app-shell__header">
-        <div className="app-shell__brand">
-          <div className="app-shell__brand-mark">
-            <MoochIcon name="paw" />
-          </div>
-          <div>
-            <p className="app-shell__brand-name">Mooch</p>
-            <p className="app-shell__brand-tagline">Social fitness for dogs</p>
-          </div>
+    <div className="app-shell app-shell--desktop">
+      <aside className="app-sidebar">
+        <div className="app-sidebar__top">
+          <NavLink className="app-sidebar__brand" to="/app">
+            <span className="app-sidebar__brand-mark">
+              <MoochIcon name="paw" />
+            </span>
+            <span className="app-sidebar__brand-copy">Mooch</span>
+          </NavLink>
+
+          <nav className="app-sidebar__nav">
+            {desktopNavigation.map((item) => (
+              <NavLink
+                className={({ isActive }) =>
+                  ["app-sidebar__link", isActive ? "app-sidebar__link--active" : ""]
+                    .filter(Boolean)
+                    .join(" ")
+                }
+                end={item.to === "/app"}
+                key={item.to}
+                to={item.to}
+              >
+                <span className="app-sidebar__link-icon">
+                  <MoochIcon name={item.icon} />
+                </span>
+                <span>{item.label}</span>
+              </NavLink>
+            ))}
+          </nav>
+
+          <NavLink className="app-sidebar__cta" to="/app/walk">
+            <MoochIcon name="plus" />
+            <span>Start Walk</span>
+          </NavLink>
         </div>
 
-        <div className="app-shell__actions">
-          <Button aria-label="Notifications" variant="icon">
+        <div className="app-sidebar__bottom">
+          <button className="app-sidebar__profile" type="button">
+            <span className="app-sidebar__user-avatar">{getInitials(user?.displayName)}</span>
+            <div className="app-sidebar__profile-copy">
+              <p className="app-sidebar__user-name">{userFirstName}</p>
+              <p className="app-sidebar__user-meta">Pack leader</p>
+            </div>
+            <span className="app-sidebar__profile-chevron">
+              <MoochIcon name="chevron-right" />
+            </span>
+          </button>
+
+          <button className="app-sidebar__utility" type="button">
+            <span className="app-sidebar__link-icon">
+              <MoochIcon name="settings" />
+            </span>
+            <span>Settings</span>
+          </button>
+
+          <button className="app-sidebar__utility" onClick={() => void handleLogout()} type="button">
+            <span className="app-sidebar__link-icon">
+              <MoochIcon name="logout" />
+            </span>
+            <span>Log out</span>
+          </button>
+        </div>
+      </aside>
+
+      <div className="app-shell__main">
+        <header className="app-shell__mobile-header">
+          <NavLink className="app-shell__mobile-brand" to="/app">
+            <span className="app-shell__mobile-brand-mark">
+              <MoochIcon name="paw" />
+            </span>
+            <span>Mooch</span>
+          </NavLink>
+          <Button aria-label="Notifications" type="button" variant="icon">
             <MoochIcon name="bell" />
           </Button>
-          <NavLink className={buttonClassName({ variant: "secondary" })} to="/app/dogs">
-            My Dogs
-          </NavLink>
-          <NavLink className={buttonClassName()} to="/app/walk">
-            + Start walk
-          </NavLink>
-          <Button onClick={() => void handleLogout()} type="button" variant="secondary">
-            Log out
-          </Button>
-        </div>
-      </header>
+        </header>
 
-      <main className="app-shell__content">
-        {pendingInvites.length > 0 && (
-          <section className="invite-banner">
-            <div className="invite-banner__header">
-              <div>
-                <p className="eyebrow">Dog invite</p>
-                <h2>You have {pendingInvites.length} dog invite{pendingInvites.length === 1 ? "" : "s"} waiting</h2>
+        <main className="app-shell__workspace">
+          {pendingInvites.length > 0 && (
+            <section className="invite-banner">
+              <div className="invite-banner__header">
+                <div>
+                  <p className="eyebrow">Dog invite</p>
+                  <h2>You have {pendingInvites.length} dog invite{pendingInvites.length === 1 ? "" : "s"} waiting</h2>
+                </div>
+                <NavLink className="section-link" to="/app/dogs">
+                  View dogs
+                </NavLink>
               </div>
-              <NavLink className="section-link" to="/app/dogs">
-                View dogs
-              </NavLink>
-            </div>
 
-            <div className="invite-banner__list">
-              {pendingInvites.map((invite) => (
-                <article className="invite-banner__item" key={invite.id}>
-                  <div>
-                    <h3>Join {invite.dogName}</h3>
-                    <p>{invite.invitedByDisplayName} invited you to the shared dog profile on {new Date(invite.createdDateUtc).toLocaleDateString("en-US", { month: "long", day: "numeric" })}.</p>
-                  </div>
-                  <div className="invite-banner__actions">
-                    <Button
-                      disabled={declineInviteMutation.isPending}
-                      onClick={() => void declineInviteMutation.mutateAsync(invite.id)}
-                      type="button"
-                      variant="secondary"
-                    >
-                      Not now
-                    </Button>
-                    <Button
-                      disabled={acceptInviteMutation.isPending}
-                      onClick={() => void acceptInviteMutation.mutateAsync(invite.id)}
-                      type="button"
-                    >
-                      Join dog
-                    </Button>
-                  </div>
-                </article>
-              ))}
-            </div>
-          </section>
-        )}
+              <div className="invite-banner__list">
+                {pendingInvites.map((invite) => (
+                  <article className="invite-banner__item" key={invite.id}>
+                    <div>
+                      <h3>Join {invite.dogName}</h3>
+                      <p>{invite.invitedByDisplayName} invited you to the shared dog profile on {new Date(invite.createdDateUtc).toLocaleDateString("en-US", { month: "long", day: "numeric" })}.</p>
+                    </div>
+                    <div className="invite-banner__actions">
+                      <Button
+                        disabled={declineInviteMutation.isPending}
+                        onClick={() => void declineInviteMutation.mutateAsync(invite.id)}
+                        type="button"
+                        variant="secondary"
+                      >
+                        Not now
+                      </Button>
+                      <Button
+                        disabled={acceptInviteMutation.isPending}
+                        onClick={() => void acceptInviteMutation.mutateAsync(invite.id)}
+                        type="button"
+                      >
+                        Join dog
+                      </Button>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </section>
+          )}
 
-        <Outlet />
-      </main>
+          <Outlet />
+        </main>
+      </div>
 
       <nav className="bottom-nav">
-        {navigation.map((item) => (
+        {mobileNavigation.map((item) => (
           <NavLink
-            className={({ isActive }) => {
-              const classes = ["bottom-nav__link"];
-              if (item.label === "Walk") {
-                classes.push("bottom-nav__link--walk");
-              }
-
-              if (isActive) {
-                classes.push("bottom-nav__link--active");
-              }
-
-              return classes.join(" ");
-            }}
+            className={({ isActive }) => ["bottom-nav__link", isActive ? "bottom-nav__link--active" : ""].filter(Boolean).join(" ")}
             end={item.to === "/app"}
             key={item.to}
             to={item.to}

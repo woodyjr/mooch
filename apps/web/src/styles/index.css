@@ -1773,3 +1773,1496 @@ ol {
     padding-inline: 12px;
   }
 }
+
+.app-shell--desktop {
+  display: flex;
+  gap: 24px;
+  align-items: stretch;
+  min-height: 100vh;
+  padding: 20px;
+  background:
+    radial-gradient(circle at top left, rgba(217, 154, 69, 0.12), transparent 24rem),
+    radial-gradient(circle at bottom right, rgba(47, 93, 80, 0.12), transparent 26rem),
+    linear-gradient(180deg, #fcfaf5 0%, #f4efe6 100%);
+}
+
+.app-sidebar {
+  display: none;
+}
+
+.app-shell__main {
+  flex: 1;
+  min-width: 0;
+}
+
+.app-shell__mobile-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 0 0 18px;
+}
+
+.app-shell__mobile-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.4rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.app-shell__mobile-brand-mark {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #3c6c5e 0%, #2f5d50 100%);
+  color: #ffffff;
+  box-shadow: 0 10px 24px rgba(36, 72, 62, 0.18);
+}
+
+.app-shell__workspace {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.home-page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.home-page__intro {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.home-page__date {
+  color: #8f8a7f;
+  font-size: 0.95rem;
+  margin-bottom: 8px;
+}
+
+.home-page__intro h1 {
+  font-size: clamp(2.1rem, 4vw, 3.25rem);
+  line-height: 1;
+  letter-spacing: -0.06em;
+  margin-bottom: 10px;
+}
+
+.home-page__intro p {
+  color: var(--text-soft);
+  font-size: 1.02rem;
+}
+
+.home-page__notify {
+  flex: none;
+}
+
+.home-page__dog-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.home-dog-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px 8px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(94, 101, 87, 0.14);
+  background: rgba(255, 253, 248, 0.82);
+  color: #465248;
+  box-shadow: 0 8px 18px rgba(45, 57, 49, 0.06);
+}
+
+.home-dog-chip--active {
+  border-color: rgba(47, 93, 80, 0.45);
+  background: rgba(237, 245, 240, 0.96);
+  color: #24483e;
+}
+
+.home-dog-chip__avatar {
+  width: 42px;
+  height: 42px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(231, 238, 233, 0.95);
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  color: #35584d;
+}
+
+.home-dog-chip__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.home-page__layout {
+  display: grid;
+  gap: 24px;
+}
+
+.home-page__overview {
+  display: grid;
+  gap: 20px;
+}
+
+.home-week-card,
+.home-stat-card,
+.home-activity-panel {
+  border: 1px solid rgba(94, 101, 87, 0.12);
+  border-radius: 28px;
+  background: rgba(255, 253, 248, 0.88);
+  box-shadow: 0 18px 40px rgba(45, 57, 49, 0.08);
+  backdrop-filter: blur(14px);
+}
+
+.home-week-card {
+  padding: 24px;
+}
+
+.home-week-card__hero {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 20px;
+  align-items: center;
+}
+
+.home-week-card__avatar {
+  width: 116px;
+  height: 116px;
+  overflow: hidden;
+  border-radius: 30px;
+  background: rgba(231, 238, 233, 0.95);
+  display: grid;
+  place-items: center;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #35584d;
+}
+
+.home-week-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.home-week-card__title-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.home-week-card__title-row h2 {
+  font-size: clamp(1.55rem, 2vw, 2rem);
+  letter-spacing: -0.04em;
+}
+
+.home-week-card__percent {
+  color: #2f5d50;
+  font-weight: 800;
+}
+
+.home-week-card__distance {
+  margin-top: 10px;
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+}
+
+.home-week-card__remaining {
+  margin-top: 6px;
+  color: var(--text-soft);
+}
+
+.home-week-card__progress {
+  margin-top: 18px;
+  height: 10px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(94, 101, 87, 0.12);
+}
+
+.home-week-card__progress-fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #3c6c5e 0%, #2f5d50 100%);
+}
+
+.home-week-card__cta {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.home-stats-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.home-stat-card {
+  padding: 20px;
+}
+
+.home-stat-card h3 {
+  font-size: clamp(1.8rem, 2vw, 2.35rem);
+  letter-spacing: -0.05em;
+}
+
+.home-stat-card h3 span {
+  font-size: 0.6em;
+  font-weight: 700;
+}
+
+.home-stat-card p {
+  margin-top: 8px;
+  color: var(--text-soft);
+}
+
+.home-activity-panel {
+  padding: 20px;
+}
+
+.home-activity-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.home-activity-panel__header h2 {
+  font-size: 1.35rem;
+  letter-spacing: -0.03em;
+}
+
+.home-activity-panel__header p {
+  margin-top: 6px;
+  color: var(--text-soft);
+}
+
+.home-activity-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.home-activity-row {
+  display: grid;
+  grid-template-columns: 28px 64px minmax(0, 1fr) auto;
+  gap: 14px;
+  align-items: center;
+  padding: 14px 0;
+}
+
+.home-activity-row + .home-activity-row {
+  border-top: 1px solid rgba(94, 101, 87, 0.1);
+}
+
+.home-activity-row__index {
+  color: #8f8a7f;
+  font-weight: 700;
+  text-align: center;
+}
+
+.home-activity-row__thumb {
+  width: 64px;
+  height: 48px;
+  border-radius: 14px;
+  background:
+    linear-gradient(135deg, rgba(231, 238, 233, 0.98) 0%, rgba(245, 248, 240, 0.92) 100%);
+  display: grid;
+  place-items: center;
+  color: #5b7a71;
+  box-shadow: inset 0 0 0 1px rgba(94, 101, 87, 0.08);
+}
+
+.home-activity-row__thumb .mooch-icon {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.home-activity-row__body h3 {
+  font-size: 1rem;
+  margin-bottom: 4px;
+}
+
+.home-activity-row__body p,
+.home-activity-row__time {
+  color: var(--text-soft);
+  font-size: 0.95rem;
+}
+
+.home-activity-row__time {
+  white-space: nowrap;
+}
+
+@media (min-width: 1024px) {
+  .bottom-nav {
+    display: none;
+  }
+
+  .app-sidebar {
+    display: flex;
+    width: 240px;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 22px 18px;
+    border: 1px solid rgba(94, 101, 87, 0.12);
+    border-radius: 28px;
+    background: rgba(255, 253, 248, 0.9);
+    box-shadow: 0 24px 48px rgba(45, 57, 49, 0.08);
+    backdrop-filter: blur(16px);
+    position: sticky;
+    top: 20px;
+    height: calc(100vh - 40px);
+  }
+
+  .app-sidebar__top,
+  .app-sidebar__bottom,
+  .app-sidebar__nav {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .app-sidebar__brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.55rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    margin-bottom: 8px;
+  }
+
+  .app-sidebar__brand-mark {
+    width: 34px;
+    height: 34px;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, #3c6c5e 0%, #2f5d50 100%);
+    color: #ffffff;
+    box-shadow: 0 10px 24px rgba(36, 72, 62, 0.18);
+  }
+
+  .app-sidebar__link,
+  .app-sidebar__utility {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 16px;
+    color: #536156;
+    border: 1px solid transparent;
+    background: transparent;
+    font-weight: 600;
+  }
+
+  .app-sidebar__link--active {
+    background: rgba(231, 238, 233, 0.96);
+    border-color: rgba(47, 93, 80, 0.12);
+    color: #23473d;
+  }
+
+  .app-sidebar__link-icon {
+    display: inline-grid;
+    place-items: center;
+    width: 18px;
+    height: 18px;
+  }
+
+  .app-sidebar__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    margin-top: 8px;
+    padding: 14px 16px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #3c6c5e 0%, #2f5d50 100%);
+    color: #ffffff;
+    font-weight: 700;
+    box-shadow: 0 16px 28px rgba(36, 72, 62, 0.2);
+  }
+
+  .app-sidebar__user-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px;
+    border-radius: 18px;
+    background: rgba(246, 241, 233, 0.9);
+    border: 1px solid rgba(94, 101, 87, 0.1);
+  }
+
+  .app-sidebar__user-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    background: #2f5d50;
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 0.88rem;
+  }
+
+  .app-sidebar__user-name {
+    font-weight: 700;
+  }
+
+  .app-sidebar__user-meta {
+    margin-top: 4px;
+    color: var(--text-soft);
+    font-size: 0.9rem;
+  }
+
+  .app-shell__mobile-header {
+    display: none;
+  }
+
+  .app-shell__workspace {
+    gap: 28px;
+  }
+
+  .home-page__layout {
+    grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.95fr);
+    align-items: start;
+  }
+}
+
+@media (max-width: 1023px) {
+  .bottom-nav {
+    display: grid;
+  }
+
+  .app-shell--desktop {
+    padding-bottom: 120px;
+  }
+
+  .home-week-card__hero {
+    grid-template-columns: 1fr;
+    justify-items: start;
+  }
+
+  .home-activity-row {
+    grid-template-columns: 28px 56px minmax(0, 1fr);
+  }
+
+  .home-activity-row__time {
+    grid-column: 3;
+    justify-self: start;
+  }
+}
+
+@media (max-width: 640px) {
+  .home-page__intro {
+    align-items: stretch;
+  }
+
+  .home-page__notify {
+    align-self: flex-start;
+  }
+
+  .home-stats-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .home-activity-panel__header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+
+/* Prototype alignment pass: desktop shell + home */
+.app-shell--desktop {
+  max-width: 1520px;
+  margin: 0 auto;
+  gap: 0;
+  padding: 18px;
+  background:
+    radial-gradient(circle at top left, rgba(217, 154, 69, 0.08), transparent 22rem),
+    radial-gradient(circle at bottom right, rgba(47, 93, 80, 0.08), transparent 24rem),
+    linear-gradient(180deg, #fcfaf5 0%, #f4efe6 100%);
+}
+
+.app-shell__main {
+  flex: 1;
+  min-width: 0;
+  padding: 6px 0 0 22px;
+}
+
+.app-shell__workspace {
+  min-height: calc(100vh - 36px);
+  border: 1px solid rgba(94, 101, 87, 0.1);
+  border-radius: 28px;
+  background: rgba(255, 253, 248, 0.78);
+  box-shadow: 0 28px 55px rgba(45, 57, 49, 0.06);
+  padding: 28px 34px 34px;
+}
+
+.app-sidebar {
+  display: none;
+}
+
+.app-shell__mobile-header {
+  margin-bottom: 18px;
+}
+
+.home-page {
+  gap: 24px;
+}
+
+.home-page__intro h1 {
+  margin: 0;
+  font-size: clamp(2.35rem, 3.4vw, 3.4rem);
+  line-height: 0.95;
+  letter-spacing: -0.065em;
+}
+
+.home-page__intro p {
+  margin-top: 8px;
+  color: #706d65;
+}
+
+.home-page__dog-selector {
+  gap: 14px;
+}
+
+.home-dog-chip {
+  gap: 10px;
+  padding: 6px 14px 6px 6px;
+  border-radius: 999px;
+  border: 1px solid rgba(94, 101, 87, 0.12);
+  background: rgba(255, 253, 248, 0.94);
+  color: #3f473f;
+  font-size: 0.96rem;
+  font-weight: 600;
+  box-shadow: none;
+}
+
+.home-dog-chip--active {
+  border-color: rgba(47, 93, 80, 0.92);
+  box-shadow: 0 0 0 2px rgba(47, 93, 80, 0.06);
+}
+
+.home-dog-chip__avatar {
+  width: 40px;
+  height: 40px;
+  border: 2px solid rgba(47, 93, 80, 0.1);
+}
+
+.home-page__top-row {
+  display: grid;
+  gap: 18px;
+  align-items: stretch;
+}
+
+.home-week-card,
+.home-stat-card,
+.home-activity-panel {
+  border-radius: 22px;
+  border: 1px solid rgba(94, 101, 87, 0.1);
+  background: rgba(255, 253, 248, 0.94);
+  box-shadow: 0 18px 35px rgba(45, 57, 49, 0.05);
+}
+
+.home-week-card {
+  padding: 16px 18px 18px;
+}
+
+.home-week-card__hero {
+  grid-template-columns: 108px minmax(0, 1fr);
+  gap: 18px;
+}
+
+.home-week-card__avatar {
+  width: 108px;
+  height: 108px;
+  border-radius: 22px;
+  background: linear-gradient(180deg, #f5efe7 0%, #ede5da 100%);
+}
+
+.home-week-card__title-row h2 {
+  font-size: 1.55rem;
+  line-height: 1;
+}
+
+.home-week-card__percent {
+  font-size: 0.95rem;
+  color: #2f5d50;
+}
+
+.home-week-card__distance {
+  margin-top: 10px;
+  font-size: 1.9rem;
+  line-height: 1;
+}
+
+.home-week-card__remaining {
+  margin-top: 10px;
+  font-size: 0.98rem;
+}
+
+.home-week-card__progress {
+  margin-top: 16px;
+  height: 9px;
+}
+
+.home-week-card__cta {
+  min-height: 52px;
+  margin-top: 16px;
+  border-radius: 14px;
+}
+
+.home-summary-grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.home-stat-card {
+  position: relative;
+  padding: 18px 18px 16px;
+}
+
+.home-stat-card__icon {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: rgba(239, 245, 241, 0.98);
+  color: #58756b;
+}
+
+.home-stat-card__icon .mooch-icon {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+
+.home-stat-card h3 {
+  margin: 8px 0 6px;
+  font-size: 2.05rem;
+  line-height: 1;
+}
+
+.home-stat-card p {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.home-activity-panel {
+  padding: 10px 18px 4px;
+}
+
+.home-activity-panel__header {
+  margin-bottom: 8px;
+  padding: 6px 4px 10px;
+}
+
+.home-activity-panel__header h2 {
+  font-size: 1.15rem;
+}
+
+.home-activity-panel__header p {
+  font-size: 0.94rem;
+}
+
+.home-activity-panel__action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(94, 101, 87, 0.12);
+  background: rgba(255, 253, 248, 0.96);
+  color: #465248;
+  font-weight: 600;
+}
+
+.home-activity-panel__action .mooch-icon {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+
+.home-activity-row {
+  grid-template-columns: 24px 58px minmax(0, 1fr) auto;
+  gap: 14px;
+  padding: 14px 4px;
+}
+
+.home-activity-row__index {
+  font-size: 0.94rem;
+  color: #8a857c;
+}
+
+.home-activity-row__thumb {
+  width: 58px;
+  height: 42px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #eef3ea 0%, #f8faf5 100%);
+}
+
+.home-activity-row__body h3 {
+  font-size: 0.98rem;
+  margin-bottom: 2px;
+}
+
+.home-activity-row__body p,
+.home-activity-row__time {
+  font-size: 0.9rem;
+}
+
+.home-activity-row__time {
+  color: #8a857c;
+}
+
+@media (min-width: 1024px) {
+  .app-sidebar {
+    display: flex;
+    width: 218px;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 14px 16px 18px;
+    border: 1px solid rgba(94, 101, 87, 0.1);
+    border-radius: 28px;
+    background: rgba(255, 253, 248, 0.86);
+    box-shadow: 0 28px 55px rgba(45, 57, 49, 0.06);
+  }
+
+  .app-sidebar__brand {
+    margin-bottom: 18px;
+    font-size: 1.4rem;
+  }
+
+  .app-sidebar__nav {
+    gap: 6px;
+  }
+
+  .app-sidebar__link,
+  .app-sidebar__utility,
+  .app-sidebar__profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 14px;
+    border: 1px solid transparent;
+    background: transparent;
+    color: #50564f;
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+
+  .app-sidebar__link--active {
+    background: #eef3ea;
+    color: #1f4238;
+  }
+
+  .app-sidebar__cta {
+    justify-content: center;
+    width: 100%;
+    margin-top: 18px;
+    padding: 13px 14px;
+    border-radius: 14px;
+    font-size: 0.96rem;
+  }
+
+  .app-sidebar__bottom {
+    gap: 8px;
+  }
+
+  .app-sidebar__profile {
+    justify-content: flex-start;
+    padding: 12px 10px;
+    border-radius: 16px;
+    background: transparent;
+  }
+
+  .app-sidebar__profile-copy {
+    flex: 1;
+    text-align: left;
+  }
+
+  .app-sidebar__profile-chevron {
+    color: #8a857c;
+  }
+
+  .app-sidebar__user-avatar {
+    width: 34px;
+    height: 34px;
+    font-size: 0.82rem;
+  }
+
+  .app-sidebar__user-name {
+    font-size: 0.95rem;
+  }
+
+  .app-sidebar__user-meta {
+    font-size: 0.82rem;
+  }
+
+  .app-shell__mobile-header {
+    display: none;
+  }
+
+  .bottom-nav {
+    display: none;
+  }
+
+  .home-page__top-row {
+    grid-template-columns: minmax(0, 1.38fr) minmax(330px, 0.9fr);
+  }
+}
+
+@media (max-width: 1023px) {
+  .home-page__top-row {
+    display: grid;
+    gap: 16px;
+  }
+
+  .home-activity-row {
+    grid-template-columns: 24px 56px minmax(0, 1fr);
+  }
+
+  .home-activity-row__time {
+    grid-column: 3;
+    justify-self: start;
+  }
+}
+
+@media (max-width: 640px) {
+  .app-shell__workspace {
+    padding: 20px 18px 24px;
+    border-radius: 22px;
+  }
+
+  .home-summary-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .home-activity-panel__header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* Contrast pass: stronger layer separation */
+.app-shell--desktop {
+  background:
+    linear-gradient(180deg, #f6f0e6 0%, #efe7db 100%);
+}
+
+.app-shell__workspace {
+  background: linear-gradient(180deg, rgba(255, 254, 250, 0.96) 0%, rgba(252, 248, 241, 0.94) 100%);
+  border: 1px solid rgba(102, 98, 88, 0.16);
+  box-shadow:
+    0 24px 48px rgba(66, 58, 47, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+.app-sidebar {
+  background: linear-gradient(180deg, rgba(252, 248, 241, 0.98) 0%, rgba(246, 239, 229, 0.96) 100%);
+  border: 1px solid rgba(102, 98, 88, 0.14);
+  box-shadow:
+    0 24px 48px rgba(66, 58, 47, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.app-sidebar__link,
+.app-sidebar__utility,
+.app-sidebar__profile {
+  color: #495149;
+}
+
+.app-sidebar__link--active {
+  background: linear-gradient(180deg, #edf4ee 0%, #e5efe7 100%);
+  border: 1px solid rgba(47, 93, 80, 0.1);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+}
+
+.hero-card,
+.metric-card,
+.activity-card,
+.challenge-card,
+.leaderboard-card,
+.feed-card,
+.friend-card,
+.walk-flow-card,
+.dog-profile-card,
+.achievement-card,
+.home-week-card,
+.home-stat-card,
+.home-activity-panel {
+  background: linear-gradient(180deg, rgba(255, 255, 252, 0.98) 0%, rgba(252, 249, 243, 0.98) 100%);
+  border: 1px solid rgba(102, 98, 88, 0.14);
+  box-shadow:
+    0 16px 32px rgba(66, 58, 47, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.78);
+}
+
+.metric-card,
+.home-stat-card {
+  background: linear-gradient(180deg, rgba(255, 255, 253, 1) 0%, rgba(250, 247, 240, 0.98) 100%);
+}
+
+.dog-profile-card {
+  gap: 22px;
+  padding: 28px;
+}
+
+.dog-profile-card__hero {
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(102, 98, 88, 0.08);
+}
+
+.owner-panel {
+  background: linear-gradient(180deg, rgba(244, 248, 244, 0.92) 0%, rgba(250, 246, 237, 0.92) 100%);
+  border: 1px solid rgba(86, 103, 93, 0.16);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.76);
+}
+
+.owner-invite-row {
+  background: rgba(255, 255, 252, 0.96);
+  border: 1px solid rgba(102, 98, 88, 0.1);
+}
+
+.ui-empty-state {
+  background: linear-gradient(180deg, rgba(253, 249, 242, 0.94) 0%, rgba(249, 244, 236, 0.94) 100%);
+  border: 1px dashed rgba(124, 119, 107, 0.24);
+}
+
+.my-dogs__add-button {
+  box-shadow: 0 16px 28px rgba(36, 72, 62, 0.18);
+}
+
+.home-activity-row + .home-activity-row,
+.owner-invite-row + .owner-invite-row {
+  border-top-color: rgba(102, 98, 88, 0.09);
+}
+
+@media (min-width: 1024px) {
+  .app-shell__workspace {
+    padding: 30px 36px 38px;
+  }
+}
+
+/* Contrast refinement: darker canvas, cleaner white cards */
+.app-shell--desktop {
+  background:
+    linear-gradient(180deg, #efe6d8 0%, #e7ddd0 100%);
+}
+
+.app-shell__workspace {
+  background: linear-gradient(180deg, rgba(247, 240, 230, 0.96) 0%, rgba(242, 234, 223, 0.96) 100%);
+  border: 1px solid rgba(96, 88, 76, 0.16);
+  box-shadow:
+    0 24px 48px rgba(66, 58, 47, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.55);
+}
+
+.app-sidebar {
+  background: linear-gradient(180deg, rgba(249, 243, 235, 0.98) 0%, rgba(242, 234, 223, 0.98) 100%);
+}
+
+.hero-card,
+.metric-card,
+.activity-card,
+.challenge-card,
+.leaderboard-card,
+.feed-card,
+.friend-card,
+.walk-flow-card,
+.dog-profile-card,
+.achievement-card,
+.home-week-card,
+.home-stat-card,
+.home-activity-panel {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.99) 0%, rgba(252, 251, 248, 0.99) 100%);
+  border: 1px solid rgba(96, 88, 76, 0.12);
+  box-shadow:
+    0 16px 30px rgba(66, 58, 47, 0.07),
+    inset 0 1px 0 rgba(255, 255, 255, 0.92);
+}
+
+.metric-card,
+.home-stat-card {
+  background: rgba(255, 255, 255, 1);
+}
+
+.owner-panel {
+  background: linear-gradient(180deg, rgba(250, 246, 240, 0.98) 0%, rgba(245, 239, 230, 0.98) 100%);
+  border: 1px solid rgba(96, 88, 76, 0.14);
+}
+
+.ui-empty-state {
+  background: rgba(255, 255, 255, 0.78);
+}
+
+.home-dog-chip {
+  background: rgba(255, 255, 255, 0.96);
+}
+
+.home-dog-chip--active {
+  background: rgba(238, 245, 240, 0.98);
+}
+
+/* Prototype palette pass: deeper forest shell, cleaner ivory workspace */
+.app-shell--desktop {
+  background:
+    radial-gradient(circle at top left, rgba(91, 125, 111, 0.08), transparent 24rem),
+    linear-gradient(180deg, #f4ede2 0%, #eee5d8 100%);
+}
+
+.app-shell__workspace {
+  background:
+    linear-gradient(180deg, rgba(255, 252, 247, 0.99) 0%, rgba(255, 251, 245, 0.985) 100%);
+  border: 1px solid rgba(112, 103, 90, 0.12);
+  box-shadow:
+    0 22px 46px rgba(70, 58, 43, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.96);
+}
+
+.mooch-page__status,
+.section-block__header p,
+.home-page__intro p,
+.home-page__date,
+.ui-section-header__copy p {
+  color: #766f63;
+}
+
+.hero-card,
+.metric-card,
+.activity-card,
+.challenge-card,
+.leaderboard-card,
+.feed-card,
+.friend-card,
+.walk-flow-card,
+.dog-profile-card,
+.achievement-card,
+.home-week-card,
+.home-stat-card,
+.home-activity-panel,
+.owner-panel,
+.invite-banner,
+.invite-banner__item,
+.ui-card,
+.panel {
+  background: rgba(255, 255, 253, 0.98);
+  border: 1px solid rgba(112, 103, 90, 0.12);
+  box-shadow:
+    0 14px 28px rgba(70, 58, 43, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.96);
+}
+
+.dog-profile-card {
+  padding: 26px;
+  gap: 24px;
+}
+
+.dog-profile-card__hero {
+  align-items: center;
+  padding-bottom: 18px;
+  border-bottom: 1px solid rgba(112, 103, 90, 0.1);
+}
+
+.dog-profile-card__avatar {
+  width: 92px;
+  height: 92px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #edf3ef 0%, #e5eee8 100%);
+  box-shadow: inset 0 0 0 1px rgba(47, 93, 80, 0.08);
+}
+
+.dog-profile-card__copy .eyebrow {
+  color: #2f5d50;
+}
+
+.dog-profile-card__copy h2 {
+  font-size: clamp(2rem, 3vw, 2.6rem);
+  line-height: 0.95;
+  margin-bottom: 8px;
+}
+
+.dog-profile-card__copy p {
+  color: #726b60;
+}
+
+.metric-grid {
+  gap: 14px;
+}
+
+.metric-card {
+  min-height: 150px;
+  border-radius: 20px;
+  padding: 20px 22px;
+}
+
+.metric-card p,
+.metric-card span {
+  color: #766f63;
+}
+
+.metric-card h3 {
+  margin: 14px 0 10px;
+  font-size: clamp(2rem, 3vw, 2.35rem);
+  line-height: 1;
+  letter-spacing: -0.05em;
+}
+
+.owner-panel {
+  border-radius: 22px;
+  padding: 24px 24px 22px;
+}
+
+.owner-panel__header h3,
+.achievement-card h3 {
+  font-size: 1.55rem;
+  letter-spacing: -0.03em;
+}
+
+.owner-panel__header p,
+.owner-invite-row p,
+.achievement-list li,
+.ui-empty-state p {
+  color: #766f63;
+}
+
+.owner-panel__form {
+  align-items: end;
+}
+
+.owner-panel__summary .badge,
+.owner-invite-row__status {
+  box-shadow: none;
+}
+
+.ui-empty-state {
+  background: linear-gradient(180deg, rgba(252, 248, 242, 0.9) 0%, rgba(248, 243, 235, 0.9) 100%);
+  border: 1px dashed rgba(124, 115, 101, 0.24);
+}
+
+.my-dogs__add-button {
+  border: 1px solid rgba(47, 93, 80, 0.12);
+  background: linear-gradient(180deg, #356c5b 0%, #2f5d50 100%);
+  box-shadow: 0 16px 28px rgba(36, 72, 62, 0.2);
+}
+
+.my-dogs__add-button:hover {
+  filter: brightness(1.02);
+}
+
+@media (min-width: 1024px) {
+  .app-sidebar {
+    width: 174px;
+    padding: 18px 14px 18px;
+    border: 0;
+    border-radius: 28px;
+    background:
+      radial-gradient(circle at top, rgba(255, 255, 255, 0.08), transparent 40%),
+      linear-gradient(180deg, #1f5a4e 0%, #255f53 100%);
+    box-shadow:
+      0 24px 44px rgba(28, 62, 54, 0.24),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  }
+
+  .app-sidebar__brand,
+  .app-sidebar__link,
+  .app-sidebar__utility,
+  .app-sidebar__profile,
+  .app-sidebar__cta {
+    color: rgba(255, 255, 255, 0.94);
+  }
+
+  .app-sidebar__brand {
+    gap: 10px;
+    margin-bottom: 14px;
+    font-size: 1.35rem;
+  }
+
+  .app-sidebar__brand-mark {
+    background: rgba(255, 255, 255, 0.16);
+    box-shadow: none;
+  }
+
+  .app-sidebar__brand-copy {
+    font-weight: 800;
+    letter-spacing: -0.03em;
+  }
+
+  .app-sidebar__link,
+  .app-sidebar__utility,
+  .app-sidebar__profile {
+    color: rgba(245, 244, 238, 0.88);
+  }
+
+  .app-sidebar__link:hover,
+  .app-sidebar__utility:hover,
+  .app-sidebar__profile:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+  }
+
+  .app-sidebar__link--active {
+    background: rgba(204, 225, 214, 0.2);
+    border-color: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  }
+
+  .app-sidebar__cta {
+    margin-top: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: linear-gradient(180deg, #5f8f77 0%, #4f7f67 100%);
+    box-shadow: 0 14px 24px rgba(20, 49, 42, 0.24);
+  }
+
+  .app-sidebar__profile {
+    padding: 10px 8px;
+  }
+
+  .app-sidebar__user-avatar {
+    background: rgba(255, 255, 255, 0.16);
+    color: #ffffff;
+  }
+
+  .app-sidebar__user-name,
+  .app-sidebar__user-meta,
+  .app-sidebar__profile-chevron,
+  .app-sidebar__utility {
+    color: inherit;
+  }
+
+  .app-sidebar__user-meta {
+    opacity: 0.72;
+  }
+
+  .app-shell__main {
+    padding-left: 20px;
+  }
+
+  .app-shell__workspace {
+    padding: 32px 36px 40px;
+  }
+}
+
+@media (max-width: 1023px) {
+  .app-shell__workspace {
+    background:
+      linear-gradient(180deg, rgba(255, 252, 247, 0.99) 0%, rgba(251, 247, 240, 0.99) 100%);
+  }
+}
+
+/* Shell integration pass: edge-to-edge desktop + flatter dogs hierarchy */
+body {
+  background: linear-gradient(180deg, #f4ede2 0%, #eee5d8 100%);
+}
+
+.app-shell--desktop {
+  max-width: none;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  gap: 0;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #f4ede2 0%, #eee5d8 100%);
+}
+
+.app-shell__main {
+  padding: 0;
+}
+
+.app-shell__workspace {
+  min-height: 100vh;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 42px 48px 56px;
+  background:
+    linear-gradient(180deg, rgba(255, 252, 247, 0.995) 0%, rgba(255, 250, 244, 0.995) 100%);
+}
+
+.mooch-page {
+  gap: 22px;
+}
+
+.dog-profile-card {
+  padding: 0;
+  gap: 0;
+  border-radius: 28px;
+  overflow: hidden;
+  background: #fffdf9;
+  border: 1px solid rgba(111, 102, 88, 0.1);
+  box-shadow: 0 18px 32px rgba(70, 58, 43, 0.05);
+}
+
+.dog-profile-card__hero {
+  padding: 34px 40px 28px;
+  border-bottom: 1px solid rgba(111, 102, 88, 0.1);
+}
+
+.metric-grid,
+.owner-panel,
+.achievement-card {
+  margin: 0 40px;
+}
+
+.metric-grid {
+  padding: 24px 0 0;
+  gap: 18px;
+}
+
+.metric-card {
+  min-height: 0;
+  padding: 28px 24px 24px;
+  border-radius: 22px;
+  background: #ffffff;
+  border: 1px solid rgba(111, 102, 88, 0.1);
+  box-shadow: none;
+}
+
+.owner-panel,
+.achievement-card {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.owner-panel {
+  padding: 32px 0 28px;
+  margin-top: 26px;
+  border-top: 1px solid rgba(111, 102, 88, 0.08);
+}
+
+.owner-panel__form {
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 14px;
+}
+
+.owner-panel .ui-field__input,
+.owner-panel .text-input,
+.owner-panel input[type="email"] {
+  background: #ffffff;
+}
+
+.owner-panel__invite-list {
+  margin-top: 22px;
+}
+
+.ui-empty-state {
+  background: #fffaf3;
+  border-radius: 22px;
+  box-shadow: none;
+}
+
+.achievement-card {
+  padding: 26px 0 36px;
+  margin-top: 8px;
+  border-top: 1px solid rgba(111, 102, 88, 0.08);
+}
+
+.achievement-list {
+  display: grid;
+  gap: 12px;
+  padding-left: 20px;
+}
+
+.my-dogs__add-button {
+  top: 28px;
+}
+
+@media (min-width: 1024px) {
+  .app-sidebar {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    border-radius: 0 28px 28px 0;
+    width: 260px;
+    padding: 22px 20px 20px;
+  }
+
+  .app-shell__main {
+    padding-left: 0;
+  }
+
+  .app-sidebar__top {
+    gap: 18px;
+  }
+
+  .app-sidebar__bottom {
+    gap: 10px;
+  }
+}
+
+@media (max-width: 1023px) {
+  .app-shell__workspace {
+    min-height: auto;
+    padding: 24px 18px 28px;
+    border-radius: 0;
+  }
+
+  .dog-profile-card__hero {
+    padding: 28px 22px 22px;
+  }
+
+  .metric-grid,
+  .owner-panel,
+  .achievement-card {
+    margin: 0 22px;
+  }
+
+  .owner-panel__form {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Sidebar cleanup pass */
+@media (min-width: 1024px) {
+  .app-sidebar {
+    border-radius: 0;
+    width: 236px;
+    padding: 22px 18px 18px;
+  }
+
+  .app-sidebar__bottom {
+    gap: 2px;
+  }
+
+  .app-sidebar__profile {
+    margin-bottom: 8px;
+  }
+
+  .app-sidebar__utility {
+    color: rgba(245, 244, 238, 0.88);
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  .app-sidebar__utility:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.08);
+  }
+}
