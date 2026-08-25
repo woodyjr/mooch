@@ -1,7 +1,10 @@
 type MoochIconName =
   | "bell"
+  | "chevron-right"
+  | "clock"
   | "dog"
   | "home"
+  | "logout"
   | "map"
   | "medal"
   | "moon"
@@ -9,6 +12,7 @@ type MoochIconName =
   | "paw"
   | "plus"
   | "ranks"
+  | "settings"
   | "trail"
   | "walk";
 
@@ -29,6 +33,19 @@ export function MoochIcon({ className, name }: MoochIconProps) {
           <path d="M7 17h10l-1.2-1.7a2.2 2.2 0 0 1-.4-1.3V10a5.4 5.4 0 1 0-10.8 0v4a2.2 2.2 0 0 1-.4 1.3L7 17Z" />
         </svg>
       );
+    case "chevron-right":
+      return (
+        <svg aria-hidden="true" className={classes} viewBox="0 0 24 24">
+          <path d="m10 7 5 5-5 5" />
+        </svg>
+      );
+    case "clock":
+      return (
+        <svg aria-hidden="true" className={classes} viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="8" />
+          <path d="M12 8v4l2.5 2" />
+        </svg>
+      );
     case "dog":
       return (
         <svg aria-hidden="true" className={classes} viewBox="0 0 24 24">
@@ -46,6 +63,14 @@ export function MoochIcon({ className, name }: MoochIconProps) {
           <path d="M5 11.2 12 6l7 5.2" />
           <path d="M7 10.8V18h10v-7.2" />
           <path d="M10 18v-4h4v4" />
+        </svg>
+      );
+    case "logout":
+      return (
+        <svg aria-hidden="true" className={classes} viewBox="0 0 24 24">
+          <path d="M14 7h-4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h4" />
+          <path d="m13 12 6 0" />
+          <path d="m16 9 3 3-3 3" />
         </svg>
       );
     case "map":
@@ -103,6 +128,13 @@ export function MoochIcon({ className, name }: MoochIconProps) {
           <path d="M12 18V6" />
           <path d="M17 18v-4" />
           <path d="M5 18h14" />
+        </svg>
+      );
+    case "settings":
+      return (
+        <svg aria-hidden="true" className={classes} viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="3" />
+          <path d="M19.4 15a1 1 0 0 0 .2 1.1l.1.1a1 1 0 0 1 0 1.4l-1 1a1 1 0 0 1-1.4 0l-.1-.1a1 1 0 0 0-1.1-.2 1 1 0 0 0-.6.9V20a1 1 0 0 1-1 1h-1.4a1 1 0 0 1-1-1v-.2a1 1 0 0 0-.7-.9 1 1 0 0 0-1 .2l-.2.1a1 1 0 0 1-1.4 0l-1-1a1 1 0 0 1 0-1.4l.1-.1a1 1 0 0 0 .2-1.1 1 1 0 0 0-.9-.6H4a1 1 0 0 1-1-1v-1.4a1 1 0 0 1 1-1h.2a1 1 0 0 0 .9-.7 1 1 0 0 0-.2-1l-.1-.2a1 1 0 0 1 0-1.4l1-1a1 1 0 0 1 1.4 0l.1.1a1 1 0 0 0 1.1.2 1 1 0 0 0 .6-.9V4a1 1 0 0 1 1-1h1.4a1 1 0 0 1 1 1v.2a1 1 0 0 0 .7.9 1 1 0 0 0 1-.2l.2-.1a1 1 0 0 1 1.4 0l1 1a1 1 0 0 1 0 1.4l-.1.1a1 1 0 0 0-.2 1.1 1 1 0 0 0 .9.6H20a1 1 0 0 1 1 1v1.4a1 1 0 0 1-1 1h-.2a1 1 0 0 0-.4 1.8" />
         </svg>
       );
     case "trail":
