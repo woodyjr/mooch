@@ -2,24 +2,24 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 
 import { useAuth } from "../../features/auth/auth-context";
-import { acceptDogOwnerInvite, declineDogOwnerInvite, fetchPendingDogOwnerInvites } from "../../features/dogs/api";
+import { acceptDogOwnerInvite, declineDogOwnerInvite, fetchDogs, fetchPendingDogOwnerInvites } from "../../features/dogs/api";
+import type { DogSummary } from "../../features/dogs/types";
 import { Button } from "../ui/button";
 import { MoochIcon } from "../ui/mooch-icon";
 
 const desktopNavigation = [
-  { to: "/app", label: "Home", icon: "home" as const },
-  { to: "/app/walk", label: "Activity", icon: "walk" as const },
-  { to: "/app/pack", label: "Pack", icon: "pack" as const },
-  { to: "/app/ranks", label: "Ranks", icon: "ranks" as const },
-  { to: "/app/dogs", label: "Dogs", icon: "dog" as const }
+  { to: "/app", label: "Dashboard", icon: "grid" as const },
+  { to: "/app/walk", label: "Activities", icon: "route" as const },
+  { to: "/app/ranks", label: "Leaderboard", icon: "trophy" as const },
+  { to: "/app/dogs", label: "Dogs", icon: "paw" as const }
 ];
 
 const mobileNavigation = [
   { to: "/app", label: "Home", icon: "home" as const },
-  { to: "/app/walk", label: "Activity", icon: "walk" as const },
+  { to: "/app/walk", label: "Activity", icon: "route" as const },
   { to: "/app/pack", label: "Pack", icon: "pack" as const },
   { to: "/app/ranks", label: "Ranks", icon: "ranks" as const },
-  { to: "/app/dogs", label: "Dogs", icon: "dog" as const }
+  { to: "/app/dogs", label: "Dogs", icon: "paw" as const }
 ];
 
 function getInitials(name: string | undefined): string {
@@ -35,6 +35,10 @@ function getInitials(name: string | undefined): string {
     .join("");
 }
 
+function getSidebarDog(dogs: DogSummary[]) {
+  return dogs.find((dog) => dog.name.toLowerCase() === "mooch") ?? dogs[0];
+}
+
 export function AppShell() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -42,6 +46,10 @@ export function AppShell() {
   const { data: pendingInvites = [] } = useQuery({
     queryKey: ["pending-dog-owner-invites"],
     queryFn: fetchPendingDogOwnerInvites
+  });
+  const { data: dogs = [] } = useQuery({
+    queryKey: ["dogs"],
+    queryFn: fetchDogs
   });
 
   const acceptInviteMutation = useMutation({
@@ -66,17 +74,33 @@ export function AppShell() {
   }
 
   const userFirstName = user?.displayName?.split(" ", 2)[0] ?? "Josh";
+  const sidebarDog = getSidebarDog(dogs);
 
   return (
     <div className="app-shell app-shell--desktop">
       <aside className="app-sidebar">
         <div className="app-sidebar__top">
           <NavLink className="app-sidebar__brand" to="/app">
+            <span className="app-sidebar__brand-copy">Mooch</span>
             <span className="app-sidebar__brand-mark">
               <MoochIcon name="paw" />
             </span>
-            <span className="app-sidebar__brand-copy">Mooch</span>
           </NavLink>
+
+          <div className="app-sidebar__dog-card">
+            <span className="app-sidebar__dog-avatar">
+              {sidebarDog?.avatarImage ? (
+                <img alt={sidebarDog.name} src={sidebarDog.avatarImage} />
+              ) : (
+                <span>{getInitials(sidebarDog?.name ?? userFirstName)}</span>
+              )}
+            </span>
+            <strong>{sidebarDog?.name ?? "Mooch"}</strong>
+            <span className="app-sidebar__dog-badge">
+              <MoochIcon name="paw" />
+              Good boy
+            </span>
+          </div>
 
           <nav className="app-sidebar__nav">
             {desktopNavigation.map((item) => (
@@ -98,22 +122,11 @@ export function AppShell() {
             ))}
           </nav>
 
-          <NavLink className="app-sidebar__cta" to="/app/walk">
-            <MoochIcon name="plus" />
-            <span>Start Walk</span>
-          </NavLink>
-        </div>
-
-        <div className="app-sidebar__bottom">
-          <button className="app-sidebar__profile" type="button">
-            <span className="app-sidebar__user-avatar">{getInitials(user?.displayName)}</span>
-            <div className="app-sidebar__profile-copy">
-              <p className="app-sidebar__user-name">{userFirstName}</p>
-              <p className="app-sidebar__user-meta">Pack leader</p>
-            </div>
-            <span className="app-sidebar__profile-chevron">
-              <MoochIcon name="chevron-right" />
+          <button className="app-sidebar__utility" type="button">
+            <span className="app-sidebar__link-icon">
+              <MoochIcon name="user" />
             </span>
+            <span>Profile</span>
           </button>
 
           <button className="app-sidebar__utility" type="button">
@@ -122,7 +135,9 @@ export function AppShell() {
             </span>
             <span>Settings</span>
           </button>
+        </div>
 
+        <div className="app-sidebar__bottom">
           <button className="app-sidebar__utility" onClick={() => void handleLogout()} type="button">
             <span className="app-sidebar__link-icon">
               <MoochIcon name="logout" />

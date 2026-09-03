@@ -1,4 +1,4 @@
-import { type FormEvent, useState } from "react";
+import { type ChangeEvent, type FormEvent, useEffect, useMemo, useState } from "react";
 
 import type { CreateDogInput } from "../api";
 import { Button } from "../../../shared/ui/button";
@@ -21,10 +21,23 @@ export function CreateDogForm({
   const [breed, setBreed] = useState("");
   const [birthDate, setBirthDate] = useState("");
   const [weightPounds, setWeightPounds] = useState("");
-  const [avatarImage, setAvatarImage] = useState("");
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [bio, setBio] = useState("");
   const [coOwnerEmail, setCoOwnerEmail] = useState("");
   const [error, setError] = useState("");
+  const previewUrl = useMemo(() => avatarFile ? URL.createObjectURL(avatarFile) : "", [avatarFile]);
+
+  useEffect(() => {
+    return () => {
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
+    };
+  }, [previewUrl]);
+
+  function handleAvatarChange(event: ChangeEvent<HTMLInputElement>) {
+    setAvatarFile(event.target.files?.[0] ?? null);
+  }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -42,7 +55,7 @@ export function CreateDogForm({
         birthDate,
         weightPounds: weightPounds.trim() ? Number(weightPounds) : undefined,
         bio,
-        avatarImage,
+        avatarFile: avatarFile ?? undefined,
         coOwnerEmail
       });
 
@@ -50,7 +63,7 @@ export function CreateDogForm({
       setBreed("");
       setBirthDate("");
       setWeightPounds("");
-      setAvatarImage("");
+      setAvatarFile(null);
       setBio("");
       setCoOwnerEmail("");
     } catch (submitError) {
@@ -95,12 +108,27 @@ export function CreateDogForm({
         />
       </div>
 
-      <TextField
-        id="dog-photo"
-        label="Photo URL"
-        onChange={(event) => setAvatarImage(event.target.value)}
-        value={avatarImage}
-      />
+      <div className="dog-photo-upload">
+        <div className="dog-photo-upload__preview">
+          {previewUrl ? (
+            <img alt="" src={previewUrl} />
+          ) : (
+            <span>{name.trim().slice(0, 1).toUpperCase() || "M"}</span>
+          )}
+        </div>
+        <div className="dog-photo-upload__body">
+          <label className="dog-photo-upload__button" htmlFor="dog-photo">
+            Upload profile photo
+          </label>
+          <input
+            accept="image/gif,image/jpeg,image/png,image/webp"
+            id="dog-photo"
+            onChange={handleAvatarChange}
+            type="file"
+          />
+          <p className="dog-form__helper">JPG, PNG, WebP, or GIF. Keep it under 5 MB.</p>
+        </div>
+      </div>
 
       <TextAreaField
         id="dog-bio"

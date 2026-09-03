@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mooch.Api.Data;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Mooch.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260825215157_StravaImportedActivities")]
+    partial class StravaImportedActivities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -171,6 +174,10 @@ namespace Mooch.Api.Migrations
                         .HasPrecision(6, 2)
                         .HasColumnType("numeric(6,2)");
 
+                    b.Property<Guid>("DogID")
+                        .HasColumnType("uuid")
+                        .HasColumnName("dogID");
+
                     b.Property<int>("DurationMinutes")
                         .HasColumnType("integer");
 
@@ -206,42 +213,11 @@ namespace Mooch.Api.Migrations
                         .IsUnique()
                         .HasFilter("\"connectedAccountID\" IS NOT NULL AND \"externalActivityID\" IS NOT NULL");
 
+                    b.HasIndex("DogID", "StartedAtUtc");
+
                     b.HasIndex("WalkerID", "StartedAtUtc");
 
                     b.ToTable("activities", (string)null);
-                });
-
-            modelBuilder.Entity("Mooch.Api.Entities.Activities.ActivityDog", b =>
-                {
-                    b.Property<Guid>("ActivityDogID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("activityDogID");
-
-                    b.Property<Guid>("ActivityID")
-                        .HasColumnType("uuid")
-                        .HasColumnName("activityID");
-
-                    b.Property<DateTimeOffset>("CreatedDateUtc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("createdDateUTC");
-
-                    b.Property<Guid>("DogID")
-                        .HasColumnType("uuid")
-                        .HasColumnName("dogID");
-
-                    b.HasKey("ActivityDogID");
-
-                    b.HasIndex("ActivityID");
-
-                    b.HasIndex("DogID");
-
-                    b.HasIndex("ActivityID", "DogID")
-                        .IsUnique();
-
-                    b.HasIndex("DogID", "CreatedDateUtc");
-
-                    b.ToTable("activity_dogs", (string)null);
                 });
 
             modelBuilder.Entity("Mooch.Api.Entities.Activities.ImportedActivity", b =>
@@ -728,6 +704,12 @@ namespace Mooch.Api.Migrations
                         .HasForeignKey("ConnectedAccountID")
                         .OnDelete(DeleteBehavior.SetNull);
 
+                    b.HasOne("Mooch.Api.Entities.Dogs.Dog", "Dog")
+                        .WithMany("Activities")
+                        .HasForeignKey("DogID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Mooch.Api.Entities.Walkers.Walker", "Walker")
                         .WithMany("Activities")
                         .HasForeignKey("WalkerID")
@@ -736,26 +718,9 @@ namespace Mooch.Api.Migrations
 
                     b.Navigation("ConnectedAccount");
 
-                    b.Navigation("Walker");
-                });
-
-            modelBuilder.Entity("Mooch.Api.Entities.Activities.ActivityDog", b =>
-                {
-                    b.HasOne("Mooch.Api.Entities.Activities.Activity", "Activity")
-                        .WithMany("ActivityDogs")
-                        .HasForeignKey("ActivityID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Mooch.Api.Entities.Dogs.Dog", "Dog")
-                        .WithMany("ActivityDogs")
-                        .HasForeignKey("DogID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Activity");
-
                     b.Navigation("Dog");
+
+                    b.Navigation("Walker");
                 });
 
             modelBuilder.Entity("Mooch.Api.Entities.Activities.ImportedActivity", b =>
@@ -875,11 +840,6 @@ namespace Mooch.Api.Migrations
                     b.Navigation("Walker");
                 });
 
-            modelBuilder.Entity("Mooch.Api.Entities.Activities.Activity", b =>
-                {
-                    b.Navigation("ActivityDogs");
-                });
-
             modelBuilder.Entity("Mooch.Api.Entities.Challenges.Challenge", b =>
                 {
                     b.Navigation("Participants");
@@ -887,7 +847,7 @@ namespace Mooch.Api.Migrations
 
             modelBuilder.Entity("Mooch.Api.Entities.Dogs.Dog", b =>
                 {
-                    b.Navigation("ActivityDogs");
+                    b.Navigation("Activities");
 
                     b.Navigation("OwnerInvites");
 

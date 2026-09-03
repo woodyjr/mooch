@@ -1,16 +1,25 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useMemo, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useState, type ChangeEvent, type FormEvent } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
-import { fetchDogOwnerInvites, fetchDogs, inviteDogOwner } from "../features/dogs/api";
+import { deleteDog, fetchDogOwnerInvites, fetchDogs, inviteDogOwner, updateDog, uploadDogAvatar } from "../features/dogs/api";
 import { Badge } from "../shared/ui/badge";
 import { Button } from "../shared/ui/button";
 import { Card } from "../shared/ui/card";
 import { EmptyState } from "../shared/ui/empty-state";
-import { TextField } from "../shared/ui/field";
+import { TextAreaField, TextField } from "../shared/ui/field";
 import { MoochIcon } from "../shared/ui/mooch-icon";
 import { SectionHeader } from "../shared/ui/section-header";
 import { Tabs } from "../shared/ui/tabs";
+
+function getDogInitials(name: string) {
+  return name
+    .split(" ")
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase() ?? "")
+    .join("");
+}
 
 export function DogsPage() {
   const navigate = useNavigate();
@@ -23,6 +32,13 @@ export function DogsPage() {
   const [selectedDogId, setSelectedDogId] = useState<string | null>(null);
   const [inviteEmail, setInviteEmail] = useState("");
   const [inviteError, setInviteError] = useState("");
+  const [profileError, setProfileError] = useState("");
+  const [isEditingProfile, setIsEditingProfile] = useState(false);
+  const [editName, setEditName] = useState("");
+  const [editBreed, setEditBreed] = useState("");
+  const [editBirthDate, setEditBirthDate] = useState("");
+  const [editWeightPounds, setEditWeightPounds] = useState("");
+  const [editBio, setEditBio] = useState("");
 
   const requestedDogId = searchParams.get("selected");
 
@@ -41,7 +57,13 @@ export function DogsPage() {
       return;
     }
 
-    setSelectedDogId((currentDogId) => currentDogId ?? dogs[0].id);
+    setSelectedDogId((currentDogId) => {
+      if (currentDogId && dogs.some((dog) => dog.id === currentDogId)) {
+        return currentDogId;
+      }
+
+      return dogs[0].id;
+    });
   }, [dogs, requestedDogId, setSearchParams]);
 
   const selectedDog = useMemo(() => {
@@ -51,6 +73,25 @@ export function DogsPage() {
 
     return dogs.find((dog) => dog.id === selectedDogId) ?? dogs[0];
   }, [dogs, selectedDogId]);
+
+  useEffect(() => {
+    if (!selectedDog) {
+      setIsEditingProfile(false);
+      setEditName("");
+      setEditBreed("");
+      setEditBirthDate("");
+      setEditWeightPounds("");
+      setEditBio("");
+      return;
+    }
+
+    setIsEditingProfile(false);
+    setEditName(selectedDog.name);
+    setEditBreed(selectedDog.breed === "Breed not added yet" ? "" : selectedDog.breed);
+    setEditBirthDate(selectedDog.birthDate ?? "");
+    setEditWeightPounds(selectedDog.weightPounds?.toString() ?? "");
+    setEditBio(selectedDog.bio === "No notes yet." ? "" : selectedDog.bio);
+  }, [selectedDog]);
 
   const { data: ownerInvites = [], isLoading: isInvitesLoading } = useQuery({
     queryKey: ["dog-owner-invites", selectedDog?.id],
@@ -71,6 +112,47 @@ export function DogsPage() {
     }
   });
 
+  const updateDogMutation = useMutation({
+    mutationFn: updateDog,
+    onSuccess: async (dog) => {
+      setProfileError("");
+      setIsEditingProfile(false);
+      setSelectedDogId(dog.id);
+      await queryClient.invalidateQueries({ queryKey: ["dogs"] });
+      await queryClient.invalidateQueries({ queryKey: ["dog-dashboard", dog.id] });
+    },
+    onError: (submitError) => {
+      setProfileError(submitError instanceof Error ? submitError.message : "Could not update that dog profile right now.");
+    }
+  });
+
+  const uploadAvatarMutation = useMutation({
+    mutationFn: async ({ dogId, file }: { dogId: string; file: File }) => uploadDogAvatar(dogId, file),
+    onSuccess: async (dog) => {
+      setProfileError("");
+      setSelectedDogId(dog.id);
+      await queryClient.invalidateQueries({ queryKey: ["dogs"] });
+      await queryClient.invalidateQueries({ queryKey: ["dog-dashboard", dog.id] });
+    },
+    onError: (submitError) => {
+      setProfileError(submitError instanceof Error ? submitError.message : "Could not upload that dog photo right now.");
+    }
+  });
+
+  const deleteDogMutation = useMutation({
+    mutationFn: deleteDog,
+    onSuccess: async () => {
+      setProfileError("");
+      setSelectedDogId(null);
+      await queryClient.invalidateQueries({ queryKey: ["dogs"] });
+      await queryClient.invalidateQueries({ queryKey: ["dog-dashboard"] });
+      await queryClient.invalidateQueries({ queryKey: ["pending-dog-owner-invites"] });
+    },
+    onError: (submitError) => {
+      setProfileError(submitError instanceof Error ? submitError.message : "Could not remove that dog from your pack right now.");
+    }
+  });
+
   async function handleInviteSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setInviteError("");
@@ -83,21 +165,97 @@ export function DogsPage() {
     await inviteOwnerMutation.mutateAsync(inviteEmail);
   }
 
-  return (
-    <section className="mooch-page">
-      <Button
-        className="my-dogs__add-button"
-        onClick={() => navigate("/app/dogs/new")}
-        type="button"
-        variant="primary"
-      >
-        <span>
-          <MoochIcon name="plus" />
-        </span>
-        <span>Add Dog</span>
-      </Button>
+  function resetEditForm() {
+    if (!selectedDog) {
+      return;
+    }
 
+    setProfileError("");
+    setIsEditingProfile(false);
+    setEditName(selectedDog.name);
+    setEditBreed(selectedDog.breed === "Breed not added yet" ? "" : selectedDog.breed);
+    setEditBirthDate(selectedDog.birthDate ?? "");
+    setEditWeightPounds(selectedDog.weightPounds?.toString() ?? "");
+    setEditBio(selectedDog.bio === "No notes yet." ? "" : selectedDog.bio);
+  }
+
+  async function handleProfileSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    if (!selectedDog) {
+      return;
+    }
+
+    setProfileError("");
+
+    if (!editName.trim()) {
+      setProfileError("Name is required.");
+      return;
+    }
+
+    try {
+      await updateDogMutation.mutateAsync({
+        dogId: selectedDog.id,
+        name: editName,
+        breed: editBreed,
+        birthDate: editBirthDate,
+        weightPounds: editWeightPounds.trim() ? Number(editWeightPounds) : undefined,
+        bio: editBio
+      });
+    } catch {
+      // The mutation's onError already sets profileError.
+    }
+  }
+
+  async function handleAvatarChange(event: ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+
+    if (!selectedDog || !file) {
+      return;
+    }
+
+    await uploadAvatarMutation.mutateAsync({ dogId: selectedDog.id, file });
+  }
+
+  async function handleDeleteDog() {
+    if (!selectedDog) {
+      return;
+    }
+
+    const warning = selectedDog.isPrimaryOwner
+      ? `Are you sure you want to remove ${selectedDog.name}?\n\nThis will delete all data associated with ${selectedDog.name}. This action cannot be undone.`
+      : `Are you sure you want to remove ${selectedDog.name} from your saved dogs?\n\nThe shared dog profile will remain for other owners.`;
+
+    const confirmed = window.confirm(warning);
+
+    if (!confirmed) {
+      return;
+    }
+
+    try {
+      await deleteDogMutation.mutateAsync(selectedDog.id);
+    } catch {
+      // The mutation's onError already sets profileError.
+    }
+  }
+
+  return (
+    <section className="mooch-page dogs-page">
       <SectionHeader
+        action={(
+          <Button
+            className="my-dogs__add-button"
+            onClick={() => navigate("/app/dogs/new")}
+            type="button"
+            variant="primary"
+          >
+            <span>
+              <MoochIcon name="plus" />
+            </span>
+            <span>Add Dog</span>
+          </Button>
+        )}
         description="Switch between each dog you have set up and keep their profile current."
         title="My Dogs"
       />
@@ -118,21 +276,126 @@ export function DogsPage() {
           {selectedDog && (
             <section className="dog-profile-card">
               <div className="dog-profile-card__hero">
-                <div className="dog-profile-card__avatar">
-                  {selectedDog.avatarImage ? (
-                    <img alt={selectedDog.name} className="hero-card__avatar-image" src={selectedDog.avatarImage} />
-                  ) : (
-                    <MoochIcon name="dog" />
-                  )}
+                <div className="dog-profile-card__identity">
+                  <div className="dog-profile-card__avatar">
+                    {selectedDog.avatarImage ? (
+                      <img alt={selectedDog.name} className="dog-profile-card__avatar-image" src={selectedDog.avatarImage} />
+                    ) : (
+                      <span>{getDogInitials(selectedDog.name)}</span>
+                    )}
+                  </div>
+
+                  <div className="dog-profile-card__copy">
+                    <p className="eyebrow">{selectedDog.isPrimaryOwner ? "Primary identity" : "Shared dog"}</p>
+                    <h2>{selectedDog.name}</h2>
+                    <p>{selectedDog.breed}</p>
+                    <p>{selectedDog.bio}</p>
+                  </div>
                 </div>
 
-                <div className="dog-profile-card__copy">
-                  <p className="eyebrow">Primary identity</p>
-                  <h2>{selectedDog.name}</h2>
-                  <p>{selectedDog.breed}</p>
-                  <p>{selectedDog.bio}</p>
+                <div className="dog-profile-card__actions">
+                  <Button
+                    disabled={updateDogMutation.isPending}
+                    onClick={() => {
+                      setProfileError("");
+                      setIsEditingProfile((current) => !current);
+                    }}
+                    type="button"
+                    variant="secondary"
+                  >
+                    <MoochIcon name="settings" />
+                    <span>{isEditingProfile ? "Close edit" : "Edit profile"}</span>
+                  </Button>
+                  <label className="ui-button ui-button--secondary ui-button--md dog-profile-card__upload" htmlFor={`dog-avatar-${selectedDog.id}`}>
+                    <MoochIcon name="upload" />
+                    <span>{uploadAvatarMutation.isPending ? "Uploading..." : "Upload photo"}</span>
+                  </label>
+                  <input
+                    accept="image/gif,image/jpeg,image/png,image/webp"
+                    disabled={uploadAvatarMutation.isPending}
+                    id={`dog-avatar-${selectedDog.id}`}
+                    onChange={(event) => void handleAvatarChange(event)}
+                    type="file"
+                  />
+                  <Button
+                    disabled={deleteDogMutation.isPending}
+                    onClick={() => void handleDeleteDog()}
+                    type="button"
+                    variant="text"
+                  >
+                    <MoochIcon name="trash" />
+                    <span>{deleteDogMutation.isPending ? "Removing..." : selectedDog.isPrimaryOwner ? "Remove dog" : "Remove from saved dogs"}</span>
+                  </Button>
                 </div>
               </div>
+
+              {isEditingProfile && (
+                <form className="dog-profile-edit" onSubmit={(event) => void handleProfileSubmit(event)}>
+                  <div className="dog-profile-edit__grid">
+                    <TextField
+                      disabled={updateDogMutation.isPending}
+                      id="edit-dog-name"
+                      label="Dog name"
+                      onChange={(event) => setEditName(event.target.value)}
+                      value={editName}
+                    />
+
+                    <TextField
+                      disabled={updateDogMutation.isPending}
+                      id="edit-dog-breed"
+                      label="Breed"
+                      onChange={(event) => setEditBreed(event.target.value)}
+                      placeholder="Lab mix"
+                      value={editBreed}
+                    />
+
+                    <TextField
+                      disabled={updateDogMutation.isPending}
+                      id="edit-dog-birthday"
+                      label="Birthday"
+                      onChange={(event) => setEditBirthDate(event.target.value)}
+                      type="date"
+                      value={editBirthDate}
+                    />
+
+                    <TextField
+                      disabled={updateDogMutation.isPending}
+                      id="edit-dog-weight"
+                      inputMode="decimal"
+                      label="Weight (lbs)"
+                      onChange={(event) => setEditWeightPounds(event.target.value)}
+                      placeholder="42"
+                      value={editWeightPounds}
+                    />
+                  </div>
+
+                  <TextAreaField
+                    disabled={updateDogMutation.isPending}
+                    id="edit-dog-bio"
+                    label="Quick note"
+                    onChange={(event) => setEditBio(event.target.value)}
+                    placeholder="Must find a stick and greet every dog in sight."
+                    rows={3}
+                    value={editBio}
+                  />
+
+                  <div className="dog-profile-edit__actions">
+                    <Button
+                      disabled={updateDogMutation.isPending}
+                      onClick={resetEditForm}
+                      type="button"
+                      variant="text"
+                    >
+                      Cancel
+                    </Button>
+                    <Button disabled={updateDogMutation.isPending} type="submit">
+                      {updateDogMutation.isPending ? "Saving..." : "Save changes"}
+                    </Button>
+                  </div>
+                </form>
+              )}
+
+              {profileError && <p className="form-error form-error--light dog-profile-card__error">{profileError}</p>}
 
               <div className="metric-grid">
                 <article className="metric-card">

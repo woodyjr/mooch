@@ -1,19 +1,30 @@
 type MoochIconName =
+  | "arrow-left"
   | "bell"
+  | "calendar"
+  | "check"
   | "chevron-right"
   | "clock"
   | "dog"
+  | "grid"
   | "home"
   | "logout"
   | "map"
   | "medal"
   | "moon"
+  | "note"
   | "pack"
   | "paw"
   | "plus"
   | "ranks"
+  | "route"
+  | "save"
   | "settings"
   | "trail"
+  | "trash"
+  | "trophy"
+  | "upload"
+  | "user"
   | "walk";
 
 type MoochIconProps = {
@@ -25,12 +36,34 @@ export function MoochIcon({ className, name }: MoochIconProps) {
   const classes = className ? `mooch-icon ${className}` : "mooch-icon";
 
   switch (name) {
+    case "arrow-left":
+      return (
+        <svg aria-hidden="true" className={classes} viewBox="0 0 24 24">
+          <path d="M19 12H6" />
+          <path d="m12 6-6 6 6 6" />
+        </svg>
+      );
     case "bell":
       return (
         <svg aria-hidden="true" className={classes} viewBox="0 0 24 24">
           <path d="M8 17h8" />
           <path d="M9 17V10a3 3 0 1 1 6 0v7" />
           <path d="M7 17h10l-1.2-1.7a2.2 2.2 0 0 1-.4-1.3V10a5.4 5.4 0 1 0-10.8 0v4a2.2 2.2 0 0 1-.4 1.3L7 17Z" />
+        </svg>
+      );
+    case "calendar":
+      return (
+        <svg aria-hidden="true" className={classes} viewBox="0 0 24 24">
+          <path d="M7 4v3" />
+          <path d="M17 4v3" />
+          <path d="M5 8h14" />
+          <path d="M6.5 6h11A2.5 2.5 0 0 1 20 8.5v9A2.5 2.5 0 0 1 17.5 20h-11A2.5 2.5 0 0 1 4 17.5v-9A2.5 2.5 0 0 1 6.5 6Z" />
+        </svg>
+      );
+    case "check":
+      return (
+        <svg aria-hidden="true" className={classes} viewBox="0 0 24 24">
+          <path d="m6 12.5 4 4L18 8" />
         </svg>
       );
     case "chevron-right":
@@ -55,6 +88,15 @@ export function MoochIcon({ className, name }: MoochIconProps) {
           <path d="M12 12.5h.01" />
           <path d="M20 12c1.2.2 2 1 2 2.1 0 1-.7 1.8-1.8 2" />
           <path d="M6 15H4.8A1.8 1.8 0 0 1 3 13.2V11" />
+        </svg>
+      );
+    case "grid":
+      return (
+        <svg aria-hidden="true" className={classes} viewBox="0 0 24 24">
+          <path d="M5 5h5v5H5Z" />
+          <path d="M14 5h5v5h-5Z" />
+          <path d="M5 14h5v5H5Z" />
+          <path d="M14 14h5v5h-5Z" />
         </svg>
       );
     case "home":
@@ -96,6 +138,15 @@ export function MoochIcon({ className, name }: MoochIconProps) {
           <path d="M15.5 4.8a7.4 7.4 0 1 0 3.7 13.8 6.8 6.8 0 1 1-3.7-13.8Z" />
         </svg>
       );
+    case "note":
+      return (
+        <svg aria-hidden="true" className={classes} viewBox="0 0 24 24">
+          <path d="M6 4h10l2 2v14H6Z" />
+          <path d="M15 4v4h3" />
+          <path d="M9 12h6" />
+          <path d="M9 16h4" />
+        </svg>
+      );
     case "pack":
       return (
         <svg aria-hidden="true" className={classes} viewBox="0 0 24 24">
@@ -130,6 +181,22 @@ export function MoochIcon({ className, name }: MoochIconProps) {
           <path d="M5 18h14" />
         </svg>
       );
+    case "route":
+      return (
+        <svg aria-hidden="true" className={classes} viewBox="0 0 24 24">
+          <circle cx="6" cy="6" r="2.4" />
+          <circle cx="18" cy="18" r="2.4" />
+          <path d="M8.2 6h4.6a3.2 3.2 0 0 1 0 6.4H11a3.2 3.2 0 0 0 0 6.4h4.8" />
+        </svg>
+      );
+    case "save":
+      return (
+        <svg aria-hidden="true" className={classes} viewBox="0 0 24 24">
+          <path d="M5 5h12l2 2v12H5Z" />
+          <path d="M8 5v5h7V5" />
+          <path d="M8 19v-6h8v6" />
+        </svg>
+      );
     case "settings":
       return (
         <svg aria-hidden="true" className={classes} viewBox="0 0 24 24">
@@ -142,6 +209,41 @@ export function MoochIcon({ className, name }: MoochIconProps) {
         <svg aria-hidden="true" className={classes} viewBox="0 0 24 24">
           <path d="M12 4 8 9h2l-3 4h2l-3 5h12l-3-5h2l-3-4h2Z" />
           <path d="M12 18v2" />
+        </svg>
+      );
+    case "trash":
+      return (
+        <svg aria-hidden="true" className={classes} viewBox="0 0 24 24">
+          <path d="M5 7h14" />
+          <path d="M10 11v6" />
+          <path d="M14 11v6" />
+          <path d="M8 7l1-3h6l1 3" />
+          <path d="M7 7l1 13h8l1-13" />
+        </svg>
+      );
+    case "trophy":
+      return (
+        <svg aria-hidden="true" className={classes} viewBox="0 0 24 24">
+          <path d="M8 5h8v5a4 4 0 0 1-8 0Z" />
+          <path d="M8 7H5v2a3 3 0 0 0 3 3" />
+          <path d="M16 7h3v2a3 3 0 0 1-3 3" />
+          <path d="M12 14v4" />
+          <path d="M9 20h6" />
+        </svg>
+      );
+    case "upload":
+      return (
+        <svg aria-hidden="true" className={classes} viewBox="0 0 24 24">
+          <path d="M12 16V5" />
+          <path d="m8 9 4-4 4 4" />
+          <path d="M5 16v3h14v-3" />
+        </svg>
+      );
+    case "user":
+      return (
+        <svg aria-hidden="true" className={classes} viewBox="0 0 24 24">
+          <circle cx="12" cy="8" r="3.5" />
+          <path d="M5 19a7 7 0 0 1 14 0" />
         </svg>
       );
     case "walk":

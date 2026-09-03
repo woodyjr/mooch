@@ -19,12 +19,14 @@ public sealed class AppDbContext : IdentityDbContext<AppUser, IdentityRole<Guid>
     }
 
     public DbSet<Activity> Activities => Set<Activity>();
+    public DbSet<ActivityDog> ActivityDogs => Set<ActivityDog>();
     public DbSet<Challenge> Challenges => Set<Challenge>();
     public DbSet<ChallengeParticipant> ChallengeParticipants => Set<ChallengeParticipant>();
     public DbSet<ConnectedAccount> ConnectedAccounts => Set<ConnectedAccount>();
     public DbSet<Dog> Dogs => Set<Dog>();
     public DbSet<DogOwnerInvite> DogOwnerInvites => Set<DogOwnerInvite>();
     public DbSet<Friendship> Friendships => Set<Friendship>();
+    public DbSet<ImportedActivity> ImportedActivities => Set<ImportedActivity>();
     public DbSet<Walker> Walkers => Set<Walker>();
     public DbSet<WalkerDog> WalkerDogs => Set<WalkerDog>();
 
@@ -125,7 +127,6 @@ public sealed class AppDbContext : IdentityDbContext<AppUser, IdentityRole<Guid>
             entity.ToTable("activities");
             entity.HasKey(x => x.ActivityID);
             entity.Property(x => x.ActivityID).HasColumnName("activityID");
-            entity.Property(x => x.DogID).HasColumnName("dogID");
             entity.Property(x => x.WalkerID).HasColumnName("walkerID");
             entity.Property(x => x.ConnectedAccountID).HasColumnName("connectedAccountID");
             entity.Property(x => x.ExternalActivityID).HasColumnName("externalActivityID").HasMaxLength(200);
@@ -133,16 +134,11 @@ public sealed class AppDbContext : IdentityDbContext<AppUser, IdentityRole<Guid>
             entity.Property(x => x.Notes).HasMaxLength(1000);
             entity.Property(x => x.DistanceMiles).HasPrecision(6, 2);
             entity.Property(x => x.CreatedDateUtc).HasColumnName("createdDateUTC");
-            entity.HasIndex(x => new { x.DogID, x.StartedAtUtc });
             entity.HasIndex(x => new { x.WalkerID, x.StartedAtUtc });
             entity.HasIndex(x => x.CreatedDateUtc);
             entity.HasIndex(x => new { x.ConnectedAccountID, x.ExternalActivityID })
                 .HasFilter("\"connectedAccountID\" IS NOT NULL AND \"externalActivityID\" IS NOT NULL")
                 .IsUnique();
-            entity.HasOne(x => x.Dog)
-                .WithMany(x => x.Activities)
-                .HasForeignKey(x => x.DogID)
-                .OnDelete(DeleteBehavior.Cascade);
             entity.HasOne(x => x.Walker)
                 .WithMany(x => x.Activities)
                 .HasForeignKey(x => x.WalkerID)
@@ -151,6 +147,53 @@ public sealed class AppDbContext : IdentityDbContext<AppUser, IdentityRole<Guid>
                 .WithMany(x => x.Activities)
                 .HasForeignKey(x => x.ConnectedAccountID)
                 .OnDelete(DeleteBehavior.SetNull);
+        });
+
+        builder.Entity<ActivityDog>(entity =>
+        {
+            entity.ToTable("activity_dogs");
+            entity.HasKey(x => x.ActivityDogID);
+            entity.Property(x => x.ActivityDogID).HasColumnName("activityDogID");
+            entity.Property(x => x.ActivityID).HasColumnName("activityID");
+            entity.Property(x => x.DogID).HasColumnName("dogID");
+            entity.Property(x => x.CreatedDateUtc).HasColumnName("createdDateUTC");
+            entity.HasIndex(x => x.ActivityID);
+            entity.HasIndex(x => x.DogID);
+            entity.HasIndex(x => new { x.ActivityID, x.DogID }).IsUnique();
+            entity.HasIndex(x => new { x.DogID, x.CreatedDateUtc });
+            entity.HasOne(x => x.Activity)
+                .WithMany(x => x.ActivityDogs)
+                .HasForeignKey(x => x.ActivityID)
+                .OnDelete(DeleteBehavior.Cascade);
+            entity.HasOne(x => x.Dog)
+                .WithMany(x => x.ActivityDogs)
+                .HasForeignKey(x => x.DogID)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        builder.Entity<ImportedActivity>(entity =>
+        {
+            entity.ToTable("imported_activities");
+            entity.HasKey(x => x.ImportedActivityID);
+            entity.Property(x => x.ImportedActivityID).HasColumnName("importedActivityID");
+            entity.Property(x => x.WalkerID).HasColumnName("walkerID");
+            entity.Property(x => x.ConnectedAccountID).HasColumnName("connectedAccountID");
+            entity.Property(x => x.ExternalActivityID).HasColumnName("externalActivityID").HasMaxLength(200).IsRequired();
+            entity.Property(x => x.Title).HasMaxLength(140).IsRequired();
+            entity.Property(x => x.ActivityType).HasColumnName("activityType").HasMaxLength(40).IsRequired();
+            entity.Property(x => x.DistanceMiles).HasPrecision(6, 2);
+            entity.Property(x => x.CreatedDateUtc).HasColumnName("createdDateUTC");
+            entity.Property(x => x.RequiresDogAssignment).HasColumnName("requiresDogAssignment");
+            entity.HasIndex(x => new { x.WalkerID, x.StartedAtUtc });
+            entity.HasIndex(x => new { x.ConnectedAccountID, x.ExternalActivityID }).IsUnique();
+            entity.HasOne(x => x.Walker)
+                .WithMany()
+                .HasForeignKey(x => x.WalkerID)
+                .OnDelete(DeleteBehavior.Cascade);
+            entity.HasOne(x => x.ConnectedAccount)
+                .WithMany()
+                .HasForeignKey(x => x.ConnectedAccountID)
+                .OnDelete(DeleteBehavior.Cascade);
         });
 
         builder.Entity<Friendship>(entity =>

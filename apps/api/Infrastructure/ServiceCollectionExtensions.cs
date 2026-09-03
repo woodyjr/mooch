@@ -3,9 +3,11 @@ using Mooch.Api.Entities.Users;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Mooch.Api.Features.Activities.Manual;
 using Mooch.Api.Features.Auth;
 using Mooch.Api.Features.Dogs.Ownership;
 using Mooch.Api.Features.Dogs.Profile;
+using Mooch.Api.Features.Integrations.Strava;
 
 namespace Mooch.Api.Infrastructure;
 
@@ -69,8 +71,12 @@ public static class ServiceCollectionExtensions
         services.AddAuthorization();
         services.AddOptions<GoogleAuthOptions>()
             .Bind(configuration.GetSection(GoogleAuthOptions.SectionName));
+        services.AddOptions<StravaAuthOptions>()
+            .Bind(configuration.GetSection(StravaAuthOptions.SectionName));
 
+        services.AddHttpClient<IStravaService, StravaService>();
         services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<IActivityService, ActivityService>();
         services.AddScoped<IGoogleTokenVerifier, GoogleTokenVerifier>();
         services.AddScoped<DevelopmentDogSeeder>();
         services.AddScoped<IDogProfileService, DogProfileService>();
@@ -82,4 +88,5 @@ public static class ServiceCollectionExtensions
     private static bool IsApiRequest(PathString path) =>
         path.StartsWithSegments("/api", StringComparison.OrdinalIgnoreCase);
 }
+
 

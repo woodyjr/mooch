@@ -11,6 +11,11 @@ export default defineConfig({
         target: "http://api:8080",
         changeOrigin: true,
         secure: false
+      },
+      "/uploads": {
+        target: "http://api:8080",
+        changeOrigin: true,
+        secure: false
       }
     }
   }
