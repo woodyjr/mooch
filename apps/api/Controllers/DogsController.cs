@@ -43,6 +43,28 @@ public sealed class DogsController : ControllerBase
         return this.ToActionResult(result);
     }
 
+    [HttpPut("{dogId:guid}")]
+    public async Task<ActionResult<Response>> UpdateDog(Guid dogId, UpdateRequest request, CancellationToken cancellationToken)
+    {
+        var result = await _dogProfileService.UpdateDogAsync(User, dogId, request, cancellationToken);
+        return this.ToActionResult(result);
+    }
+
+    [HttpPost("{dogId:guid}/avatar")]
+    [RequestSizeLimit(6 * 1024 * 1024)]
+    public async Task<ActionResult<Response>> UploadAvatar(Guid dogId, [FromForm] IFormFile? file, CancellationToken cancellationToken)
+    {
+        var result = await _dogProfileService.UploadAvatarAsync(User, dogId, file, cancellationToken);
+        return this.ToActionResult(result);
+    }
+
+    [HttpDelete("{dogId:guid}")]
+    public async Task<ActionResult<bool>> DeleteDog(Guid dogId, CancellationToken cancellationToken)
+    {
+        var result = await _dogProfileService.DeleteDogAsync(User, dogId, cancellationToken);
+        return this.ToActionResult(result);
+    }
+
     [HttpGet("{dogId:guid}/owner-invites")]
     public async Task<ActionResult<IReadOnlyList<OwnerInviteResponse>>> GetOwnerInvites(Guid dogId, CancellationToken cancellationToken)
     {
@@ -78,4 +100,3 @@ public sealed class DogsController : ControllerBase
         return this.ToActionResult(result);
     }
 }
-

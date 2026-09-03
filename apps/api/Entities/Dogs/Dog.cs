@@ -14,8 +14,7 @@ public sealed class Dog
     public string? AvatarImage { get; set; }
     public DateTimeOffset CreatedDateUtc { get; set; } = DateTimeOffset.UtcNow;
 
-    public ICollection<Activity> Activities { get; set; } = [];
+    public ICollection<ActivityDog> ActivityDogs { get; set; } = [];
     public ICollection<DogOwnerInvite> OwnerInvites { get; set; } = [];
     public ICollection<WalkerDog> WalkerDogs { get; set; } = [];
 }
-

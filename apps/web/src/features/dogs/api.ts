@@ -43,7 +43,17 @@ export type CreateDogInput = {
   weightPounds?: number;
   bio?: string;
   avatarImage?: string;
+  avatarFile?: File;
   coOwnerEmail?: string;
+};
+
+export type UpdateDogInput = {
+  dogId: string;
+  name: string;
+  breed?: string;
+  birthDate?: string;
+  weightPounds?: number;
+  bio?: string;
 };
 
 function toDogSummary(dog: DogApiResponse): DogSummary {
@@ -51,6 +61,8 @@ function toDogSummary(dog: DogApiResponse): DogSummary {
     id: dog.id,
     name: dog.name,
     breed: dog.breed?.trim() || "Breed not added yet",
+    birthDate: dog.birthDate?.trim() || undefined,
+    weightPounds: dog.weightPounds ?? undefined,
     bio: dog.bio?.trim() || "No notes yet.",
     avatarImage: dog.avatarImage?.trim() || undefined,
     streakDays: 0,
@@ -131,7 +143,69 @@ export async function createDog(input: CreateDogInput): Promise<DogSummary> {
   }
 
   const dog = (await response.json()) as DogApiResponse;
+  const createdDog = toDogSummary(dog);
+
+  if (input.avatarFile) {
+    return uploadDogAvatar(createdDog.id, input.avatarFile);
+  }
+
+  return createdDog;
+}
+
+export async function updateDog(input: UpdateDogInput): Promise<DogSummary> {
+  const response = await fetch(`/api/dogs/${input.dogId}`, {
+    method: "PUT",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      name: input.name,
+      breed: input.breed?.trim() || null,
+      birthDate: input.birthDate?.trim() || null,
+      weightPounds: input.weightPounds ?? null,
+      bio: input.bio?.trim() || null
+    })
+  });
+
+  if (!response.ok) {
+    const message = await response.text();
+    throw new Error(message || "Could not update that dog profile.");
+  }
+
+  const dog = (await response.json()) as DogApiResponse;
   return toDogSummary(dog);
+}
+
+export async function uploadDogAvatar(dogId: string, file: File): Promise<DogSummary> {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const response = await fetch(`/api/dogs/${dogId}/avatar`, {
+    method: "POST",
+    credentials: "include",
+    body: formData
+  });
+
+  if (!response.ok) {
+    const message = await response.text();
+    throw new Error(message || "Could not upload that dog photo.");
+  }
+
+  const dog = (await response.json()) as DogApiResponse;
+  return toDogSummary(dog);
+}
+
+export async function deleteDog(dogId: string): Promise<void> {
+  const response = await fetch(`/api/dogs/${dogId}`, {
+    method: "DELETE",
+    credentials: "include"
+  });
+
+  if (!response.ok) {
+    const message = await response.text();
+    throw new Error(message || "Could not remove that dog from your pack.");
+  }
 }
 
 export async function fetchDogOwnerInvites(dogId: string): Promise<DogOwnerInvite[]> {

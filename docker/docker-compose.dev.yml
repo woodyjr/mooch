@@ -27,6 +27,10 @@ services:
       DOTNET_USE_POLLING_FILE_WATCHER: "1"
       ConnectionStrings__Mooch: ${MOOCH_CONNECTION_STRING:-Host=postgres;Port=5432;Database=mooch;Username=mooch;Password=mooch}
       GoogleAuth__ClientId: ${GOOGLE_CLIENT_ID:-your-google-client-id.apps.googleusercontent.com}
+      StravaAuth__ClientId: ${STRAVA_CLIENT_ID:-your-strava-client-id}
+      StravaAuth__ClientSecret: ${STRAVA_CLIENT_SECRET:-your-strava-client-secret}
+      StravaAuth__RedirectUri: ${STRAVA_REDIRECT_URI:-http://localhost:8080/api/integrations/strava/callback}
+      StravaAuth__FrontendRedirectUri: ${STRAVA_FRONTEND_REDIRECT_URI:-http://localhost:5173/app/walk}
     ports:
       - "8080:8080"
     volumes:

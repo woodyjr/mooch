@@ -2,6 +2,8 @@ export type DogSummary = {
   id: string;
   name: string;
   breed: string;
+  birthDate?: string;
+  weightPounds?: number;
   bio: string;
   avatarImage?: string;
   streakDays: number;

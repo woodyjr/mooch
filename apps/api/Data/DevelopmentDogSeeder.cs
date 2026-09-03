@@ -65,13 +65,13 @@ public sealed class DevelopmentDogSeeder
         var thisMorning = new DateTimeOffset(now.Year, now.Month, now.Day, 11, 0, 0, TimeSpan.Zero);
 
         _dbContext.Activities.AddRange(
-            CreateActivity(hank, walker, "Morning neighborhood loop", 1.8m, 34, thisMorning),
-            CreateActivity(hank, walker, "Evening stroll", 2.3m, 46, thisMorning.AddDays(-1).AddHours(7)),
-            CreateActivity(hank, walker, "Ault Park trail walk", 2.0m, 41, thisMorning.AddDays(-2).AddHours(1)),
-            CreateActivity(hank, walker, "Sunrise sniff session", 1.4m, 28, thisMorning.AddDays(-3)),
-            CreateActivity(hank, walker, "Creekside cool-down", 1.2m, 25, thisMorning.AddDays(-4)),
-            CreateActivity(mia, walker, "Mia's hill repeats", 3.4m, 52, thisMorning.AddDays(-1)),
-            CreateActivity(mooch, walker, "Mooch park loop", 2.9m, 49, thisMorning.AddDays(-2)));
+            CreateActivity(walker, "Morning neighborhood loop", 1.8m, 34, thisMorning, hank),
+            CreateActivity(walker, "Evening stroll", 2.3m, 46, thisMorning.AddDays(-1).AddHours(7), hank),
+            CreateActivity(walker, "Ault Park trail walk", 2.0m, 41, thisMorning.AddDays(-2).AddHours(1), hank),
+            CreateActivity(walker, "Sunrise sniff session", 1.4m, 28, thisMorning.AddDays(-3), hank),
+            CreateActivity(walker, "Creekside cool-down", 1.2m, 25, thisMorning.AddDays(-4), hank),
+            CreateActivity(walker, "Mia's hill repeats", 3.4m, 52, thisMorning.AddDays(-1), mia),
+            CreateActivity(walker, "Mooch park loop", 2.9m, 49, thisMorning.AddDays(-2), mooch));
 
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
@@ -85,20 +85,25 @@ public sealed class DevelopmentDogSeeder
         };
 
     private static Activity CreateActivity(
-        Dog dog,
         Walker walker,
         string title,
         decimal distanceMiles,
         int durationMinutes,
-        DateTimeOffset startedAtUtc) =>
+        DateTimeOffset startedAtUtc,
+        params Dog[] dogs) =>
         new()
         {
-            DogID = dog.DogID,
             WalkerID = walker.WalkerID,
             Title = title,
             DistanceMiles = distanceMiles,
             DurationMinutes = durationMinutes,
             Source = ActivitySourceType.Manual,
-            StartedAtUtc = startedAtUtc
+            StartedAtUtc = startedAtUtc,
+            ActivityDogs = dogs
+                .Select(dog => new ActivityDog
+                {
+                    DogID = dog.DogID
+                })
+                .ToList()
         };
 }
